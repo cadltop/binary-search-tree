@@ -7,7 +7,7 @@ export default class {
         const sortedData = this.#sort(cleanData);
     }
 
-    #clean(data) {
+    #clean(data = []) {
         const cleanData = [];
         
         for (let i1 = 0; i1 < data.length; i1++) {
@@ -26,7 +26,39 @@ export default class {
         
         return cleanData;
     }
-    #sort(data) {
+    #sort(data = []) {
+        if (data.length === 1) return data;
 
+        const middle = Math.floor(data.length / 2);
+        let left = [], rigth = [];
+
+        for (let i = 0; i < middle; i++) {
+            left.push(data[i]);
+        }
+        for (let i = middle; i < data.length; i++) {
+            rigth.push(data[i]);
+        }
+
+        left = this.#sort(left);
+        rigth = this.#sort(rigth);
+        
+        let merged = [];
+        for (let i = 0; i < data.length; i++) {
+            if (left[0] === undefined) {
+                rigth.forEach((value) => {
+                    merged.push(value)
+                })
+                break;
+            } else if (rigth[0] === undefined) {
+                left.forEach((value) => {
+                    merged.push(value)
+                })
+                break;
+            } else {
+                if (left[0] < rigth[0]) merged.push(left.shift());
+                else merged.push(rigth.shift());
+            }
+        }
+        return merged;
     }
 }
