@@ -1,7 +1,7 @@
 export default class {
-    constructor(data, leftChild, rightChild) {
+    constructor(data) {
         this.data = data,
-        this.leftChild = leftChild,
-        this.rightChild = rightChild
+        this.leftChild = null,
+        this.rightChild = null
     }
 }
