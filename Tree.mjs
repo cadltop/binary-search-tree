@@ -66,6 +66,25 @@ export default class {
         }
         
     }
+    find(value) {
+        let node; 
+        traverse(this.root, value);
+        function traverse(currentNode, val) {
+            if (currentNode === null) {
+                node = "this value does not exists.";
+                return currentNode;
+            }
+            if (currentNode.data === val) {
+                node = currentNode;
+            }
+
+            if (val < currentNode.data) currentNode.leftChild = traverse(currentNode.leftChild, val);
+            if (val > currentNode.data) currentNode.rightChild = traverse(currentNode.rightChild, val);
+            
+            return currentNode;
+        }
+        return node;
+    }
     #clean(data = []) {
         const cleanData = [];
         

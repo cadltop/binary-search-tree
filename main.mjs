@@ -9,7 +9,8 @@ const tree =  new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
 // tree.insert(999);
 // tree.insert(1001);
 // tree.delete(4);
-
+// find
+console.log(tree.find(777));
 // print
 const prettyPrint = (node, prefix = "", isLeft = true) => {
     if (node === null) {
