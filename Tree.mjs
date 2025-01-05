@@ -25,6 +25,47 @@ export default class {
             return currentNode;
         }
     }
+    delete(value) {
+        traverse(this.root, value);
+        function traverse(currentNode, val) {
+            if (currentNode === null) {
+                console.log("this value does not exists.");
+                return currentNode;
+            }
+            if (currentNode.data === val) {
+                if (currentNode.leftChild === null && currentNode.rightChild === null)
+                    return null;
+                else if (currentNode.leftChild !== null && currentNode.rightChild !== null) {
+                    const successor = findMin(currentNode);
+                    if (successor.rightChild.data === currentNode.data) 
+                        successor.rightChild = currentNode.rightChild;
+                    return successor;
+                    
+                    function findMin(node) {
+                        if (node.leftChild.leftChild !== null) {
+                            const suc = findMin(node.leftChild);
+                            suc.rightChild.rightChild = node.rightChild;
+                            node.leftChild = null;
+                            return suc;
+                        } else {
+                            const min = node.leftChild;
+                            node.leftChild = null;
+                            min.rightChild = node;
+                            return min;
+                        }
+                    }
+                }
+                else if (currentNode.leftChild !== null || currentNode.rightChild !== null) 
+                    return currentNode.leftChild || currentNode.rightChild;
+            }
+            
+            if (val < currentNode.data) currentNode.leftChild = traverse(currentNode.leftChild, val);
+            if (val > currentNode.data) currentNode.rightChild = traverse(currentNode.rightChild, val);
+            
+            return currentNode;
+        }
+        
+    }
     #clean(data = []) {
         const cleanData = [];
         
