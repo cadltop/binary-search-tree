@@ -86,6 +86,19 @@ export default class {
             if (node.rightChild !== null) queue.push(node.rightChild);
         }
     }
+    inOrder(callback) {
+        if (callback instanceof(Function) === false)
+            throw Error("please provide a callback function");
+        
+        traverse(this.root);
+        function traverse(currentNode) {
+            if (currentNode === null) return currentNode;
+            traverse(currentNode.leftChild); 
+            callback(currentNode);
+            traverse(currentNode.rightChild); 
+            return currentNode;
+        }
+    }
     #clean(data = []) {
         const cleanData = [];
         

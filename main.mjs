@@ -17,6 +17,12 @@ const tree =  new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
 //   node.data += 1;
 //   console.log(node.data);
 // }
+// in order
+tree.inOrder(printNode);
+function printNode(node) {
+  node.data += 1;
+  console.log(node.data);
+}
 // print
 const prettyPrint = (node, prefix = "", isLeft = true) => {
     if (node === null) {
