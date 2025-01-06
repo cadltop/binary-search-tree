@@ -1,7 +1,6 @@
 import Tree from "./Tree.mjs";
 
-// const tree =  new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
-const tree =  new Tree([1, 2, 3, 4, 5, 6, 7]);
+const tree =  new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
 
 // insert
 // tree.insert(1000);
@@ -17,7 +16,9 @@ const tree =  new Tree([1, 2, 3, 4, 5, 6, 7]);
 // in order
 // tree.inOrder(printNode);
 // pre order
-tree.preOrder(printNode);
+// tree.preOrder(printNode);
+// post order
+tree.postOrder(printNode);
 // callback
 function printNode(node) {
   console.log(node.data);
