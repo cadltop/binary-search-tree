@@ -85,6 +85,15 @@ export default class {
         }
         return node;
     }
+    levelOrder(callback) {
+        let queue = [this.root];
+        while (queue.length !== 0) {
+            const node = queue.shift();
+            callback(node);
+            if (node.leftChild !== null) queue.push(node.leftChild);
+            if (node.rightChild !== null) queue.push(node.rightChild);
+        }
+    }
     #clean(data = []) {
         const cleanData = [];
         
