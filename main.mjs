@@ -10,14 +10,13 @@ const tree =  new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
 // tree.insert(1001);
 // tree.delete(4);
 // find
-// console.log(tree.find(777));
+// console.log(tree.find(23));
 // level order
-tree.levelOrder(printNode);
-
-function printNode(node) {
-  node.data += 1;
-  console.log(node.data);
-}
+// tree.levelOrder(printNode);
+// function printNode(node) {
+//   node.data += 1;
+//   console.log(node.data);
+// }
 // print
 const prettyPrint = (node, prefix = "", isLeft = true) => {
     if (node === null) {

@@ -67,25 +67,17 @@ export default class {
         
     }
     find(value) {
-        let node; 
-        traverse(this.root, value);
-        function traverse(currentNode, val) {
-            if (currentNode === null) {
-                node = "this value does not exists.";
-                return currentNode;
-            }
-            if (currentNode.data === val) {
-                node = currentNode;
-            }
-
-            if (val < currentNode.data) currentNode.leftChild = traverse(currentNode.leftChild, val);
-            if (val > currentNode.data) currentNode.rightChild = traverse(currentNode.rightChild, val);
-            
-            return currentNode;
+        let searchedNode;
+        this.levelOrder(callback);
+        function callback(node) {
+            if (node.data === value)
+                searchedNode = node;
         }
-        return node;
+        return searchedNode || Error("this value does not exists.");
     }
     levelOrder(callback) {
+        if (callback instanceof(Function) === false)
+            throw Error("please provide a callback function");
         let queue = [this.root];
         while (queue.length !== 0) {
             const node = queue.shift();
