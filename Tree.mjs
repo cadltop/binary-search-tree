@@ -99,6 +99,19 @@ export default class {
             return currentNode;
         }
     }
+    preOrder(callback) {
+        if (callback instanceof(Function) === false)
+            throw Error("please provide a callback function");
+        
+        traverse(this.root);
+        function traverse(currentNode) {
+            if (currentNode === null) return currentNode;
+            callback(currentNode);
+            traverse(currentNode.leftChild); 
+            traverse(currentNode.rightChild); 
+            return currentNode;
+        }
+    }
     #clean(data = []) {
         const cleanData = [];
         
