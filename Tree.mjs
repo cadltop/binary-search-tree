@@ -125,6 +125,34 @@ export default class {
             return currentNode;
         }
     }
+    height(node) {
+        const heights = {
+            left: 0,
+            right: 0
+        }
+        let height = 0;
+        
+        traverse(node.leftChild);
+        heights.left = height
+        height = 0;
+        traverse(node.rightChild);
+        heights.right = height
+
+        return (heights.left > heights.right) ? heights.left : heights.right;
+        
+        function traverse(node) {
+            let queue = [node];
+            while (queue.length !== 0) {
+                const node = queue.shift();
+                if (node === null) break;
+
+                if (node.leftChild !== null) queue.push(node.leftChild);
+                else if (node.rightChild !== null) queue.push(node.rightChild);
+
+                height++;
+            }
+        }
+    }
     #clean(data = []) {
         const cleanData = [];
         
