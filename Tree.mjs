@@ -1,7 +1,7 @@
 import Node from './Node.mjs';
 export default class {
     constructor(data) {
-        this.root = this.buildTree(data);
+        if (data) this.root = this.buildTree(data);
     }    
     buildTree(data) {
         data = this.#clean(data);
@@ -9,29 +9,30 @@ export default class {
         return this.#build(data);
     }
     insert(value) {
-        traverse(this.root, value);
-        function traverse(currentNode, val) {
-            if (currentNode === null) {
-                return new Node(val);
-            }
-            if (currentNode.data === val) {
-                console.log("this value exists already.");
+        if (!this.root)
+            this.root = new Node(value);
+        else {
+            traverse(this.root, value);
+            function traverse(currentNode, val) {
+                if (currentNode === null) 
+                    return new Node(val);
+                if (currentNode.data === val)
+                    throw new Error("this value exists already.");
+                
+                if (val < currentNode.data) 
+                    currentNode.leftChild = traverse(currentNode.leftChild, val);
+                if (val > currentNode.data) 
+                    currentNode.rightChild = traverse(currentNode.rightChild, val);
+                
                 return currentNode;
             }
-
-            if (val < currentNode.data) currentNode.leftChild = traverse(currentNode.leftChild, val);
-            if (val > currentNode.data) currentNode.rightChild = traverse(currentNode.rightChild, val);
-            
-            return currentNode;
         }
     }
     delete(value) {
         traverse(this.root, value);
         function traverse(currentNode, val) {
-            if (currentNode === null) {
-                console.log("this value does not exists.");
-                return currentNode;
-            }
+            if (currentNode === null)
+                throw new Error("this value does not exists.");
             if (currentNode.data === val) {
                 if (currentNode.leftChild === null && currentNode.rightChild === null)
                     return null;
@@ -73,11 +74,11 @@ export default class {
             if (node.data === value)
                 searchedNode = node;
         }
-        return searchedNode || Error("this value does not exists.");
+        return searchedNode || new Error("this value does not exists.");
     }
     levelOrder(callback) {
         if (callback instanceof(Function) === false)
-            throw Error("please provide a callback function");
+            throw new Error("please provide a callback function");
         let queue = [this.root];
         while (queue.length !== 0) {
             const node = queue.shift();
@@ -88,7 +89,7 @@ export default class {
     }
     inOrder(callback) {
         if (callback instanceof(Function) === false)
-            throw Error("please provide a callback function");
+            throw new Error("please provide a callback function");
         
         traverse(this.root);
         function traverse(currentNode) {
@@ -101,7 +102,7 @@ export default class {
     }
     preOrder(callback) {
         if (callback instanceof(Function) === false)
-            throw Error("please provide a callback function");
+            throw new Error("please provide a callback function");
         
         traverse(this.root);
         function traverse(currentNode) {
@@ -114,7 +115,7 @@ export default class {
     }
     postOrder(callback) {
         if (callback instanceof(Function) === false)
-            throw Error("please provide a callback function");
+            throw new Error("please provide a callback function");
         
         traverse(this.root);
         function traverse(currentNode) {
@@ -160,7 +161,7 @@ export default class {
         while (currentNode.data !== node.data) {
             if (currentNode.data > node.data) currentNode = currentNode.leftChild;
             else if (currentNode.data < node.data) currentNode = currentNode.rightChild;
-            else throw Error("this value does not exists.");
+            else throw new Error("this value does not exists.");
             height++;
         }
         return height;
