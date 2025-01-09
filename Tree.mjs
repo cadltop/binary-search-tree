@@ -131,7 +131,7 @@ export default class {
             right: 0
         }
         let height = 0;
-        
+
         traverse(node.leftChild);
         heights.left = height
         height = 0;
@@ -152,6 +152,18 @@ export default class {
                 height++;
             }
         }
+    }
+    depth(node) {
+        let height = 0;
+        let currentNode = this.root;
+        
+        while (currentNode.data !== node.data) {
+            if (currentNode.data > node.data) currentNode = currentNode.leftChild;
+            else if (currentNode.data < node.data) currentNode = currentNode.rightChild;
+            else throw Error("this value does not exists.");
+            height++;
+        }
+        return height;
     }
     #clean(data = []) {
         const cleanData = [];

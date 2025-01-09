@@ -24,7 +24,9 @@ const tree =  new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
 //   console.log(node.data);
 // }
 // height
-console.log(tree.height(tree.find(10)));
+// console.log(tree.height(tree.find(10)));
+// depth
+console.log(tree.depth(tree.find(10)));
 
 // print
 const prettyPrint = (node, prefix = "", isLeft = true) => {
