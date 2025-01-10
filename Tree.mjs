@@ -186,6 +186,17 @@ export default class {
         }
         return true;
     }
+    rebalance() {
+        let queue = [this.root];
+        let newData = [];
+        while (queue.length !== 0) {
+            const node = queue.shift();
+            if (node.leftChild !== null) queue.push(node.leftChild);
+            if (node.rightChild !== null) queue.push(node.rightChild);
+            newData.push(node.data);
+        }
+        this.root = this.buildTree(newData);
+    }
     #clean(data = []) {
         const cleanData = [];
         

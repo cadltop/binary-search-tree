@@ -1,7 +1,7 @@
 import Tree from "./Tree.mjs";
 
-const tree =  new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
-// const tree =  new Tree();
+// const tree =  new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
+const tree =  new Tree();
 
 // insert
 // tree.insert(1000);
@@ -58,7 +58,13 @@ function growTree(size, range = 100) {
 }
 
 // post process
-// growTree(50, 60);
+growTree(50, 60);
 prettyPrint(tree.root);
 
+// balanced
+// console.log(tree.isBalanced());
+
+// rebalance
+tree.rebalance();
+prettyPrint(tree.root);
 console.log(tree.isBalanced());
