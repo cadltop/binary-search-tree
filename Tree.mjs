@@ -166,6 +166,26 @@ export default class {
         }
         return height;
     }
+    isBalanced() {
+        let queue = [this.root];
+        while (queue.length !== 0) {
+            const node = queue.shift();
+            let left, right;
+
+            if (node.leftChild !== null) {
+                queue.push(node.leftChild);
+                left = this.height(node.leftChild);
+            } else left = 0;
+            if (node.rightChild !== null) {
+                queue.push(node.rightChild);
+                right = this.height(node.rightChild);
+            } else right = 0;
+
+            const diff = (left > right) ? left - right: right - left;
+            if (diff > 1) return false;
+        }
+        return true;
+    }
     #clean(data = []) {
         const cleanData = [];
         
