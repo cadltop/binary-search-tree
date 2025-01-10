@@ -1,7 +1,38 @@
 import Tree from "./Tree.mjs";
 
-// const tree =  new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
-const tree =  new Tree();
+const tree =  new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
+prettyPrint(tree.root);
+console.log(tree.isBalanced());
+
+console.log("level");
+tree.levelOrder(printNode);
+console.log("pre");
+tree.preOrder(printNode);
+console.log("post");
+tree.postOrder(printNode);
+console.log("in");
+tree.inOrder(printNode);
+
+console.log("grow");
+growTree(90, 100);
+prettyPrint(tree.root);
+console.log(tree.isBalanced());
+
+console.log("rebalance");
+tree.rebalance();
+prettyPrint(tree.root);
+console.log(tree.isBalanced());
+
+console.log("level");
+tree.levelOrder(printNode);
+console.log("pre");
+tree.preOrder(printNode);
+console.log("post");
+tree.postOrder(printNode);
+console.log("in");
+tree.inOrder(printNode);
+
+// const tree =  new Tree();
 
 // insert
 // tree.insert(1000);
@@ -21,16 +52,16 @@ const tree =  new Tree();
 // post order
 // tree.postOrder(printNode);
 // callback
-// function printNode(node) {
-//   console.log(node.data);
-// }
+function printNode(node) {
+  console.log(node.data);
+}
 // height
 // console.log(tree.height(tree.find(10)));
 // depth
 // console.log(tree.depth(tree.find(10)));
 
 // print
-const prettyPrint = (node, prefix = "", isLeft = true) => {
+function prettyPrint(node, prefix = "", isLeft = true) {
   if (node === null) {
     return;
   }
@@ -57,14 +88,14 @@ function growTree(size, range = 100) {
   } 
 }
 
-// post process
-growTree(50, 60);
-prettyPrint(tree.root);
+// // post process
+// growTree(50, 60);
+// prettyPrint(tree.root);
 
-// balanced
+// // balanced
+// // console.log(tree.isBalanced());
+
+// // rebalance
+// tree.rebalance();
+// prettyPrint(tree.root);
 // console.log(tree.isBalanced());
-
-// rebalance
-tree.rebalance();
-prettyPrint(tree.root);
-console.log(tree.isBalanced());
