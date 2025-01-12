@@ -4,68 +4,135 @@ export default class {
         if (data) this.root = this.buildTree(data);
     }    
     buildTree(data) {
-        data = this.#clean(data);
-        data = this.#sort(data);
-        return this.#build(data);
+        data = clean(data);
+        data = sort(data);
+        return build(data);
+
+        function clean(data = []) {
+            const clean = [];
+            for (let dIndex = 0; dIndex < data.length; dIndex++) {
+                if (clean.length === 0) clean.push(data[0]);
+                else {
+                    let duplicate = false;
+                    for (let cIndex = 0; cIndex < clean.length; cIndex++) {
+                        if (data[dIndex] === clean[cIndex]) {
+                            duplicate = true;
+                            break;
+                        }
+                    } 
+                    if (duplicate === false) clean.push(data[dIndex]);
+                }
+            }
+            return clean;
+        }
+        function sort(data = []) {
+            if (data.length === 1) return data;
+            
+            const midIndex = Math.floor(data.length / 2);
+            let left = [], right = [];
+            
+            for (let i = 0; i < data.length; i++) {
+                if (i < midIndex) left.push(data[i]);
+                if (i >= midIndex) right.push(data[i]);
+            }
+            
+            left = sort(left);
+            right = sort(right);
+            
+            const sorted = [];
+            for (let i = 0; i < data.length; i++) {
+                if (left.length === 0) {
+                    right.forEach((value) => {
+                        sorted.push(value)
+                    })
+                    break;
+                } else if (right.length === 0) {
+                    left.forEach((value) => {
+                        sorted.push(value)
+                    })
+                    break;
+                } else {
+                    if (left[0] < right[0]) sorted.push(left.shift());
+                    else sorted.push(right.shift());
+                }
+            }
+            return sorted;
+        }
+        function build(data = []) {
+            if (data.length === 0) return null;
+            if (data.length === 1) return new Node(data[0]);
+        
+            const midIndex = Math.floor(data.length / 2);
+            let left = [], right = [];
+        
+            for (let i = 0; i < data.length; i++) {
+                if (i < midIndex) left.push(data[i]);
+                if (i > midIndex) right.push(data[i]);
+            }
+        
+            const node = new Node(data[midIndex]);
+            node.left = build(left);
+            node.right = build(right);
+            return node;
+        }
     }
     insert(value) {
         if (!this.root)
             this.root = new Node(value);
         else {
             traverse(this.root, value);
-            function traverse(currentNode, val) {
-                if (currentNode === null) 
+            function traverse(node = new Node(), val) {
+                if (node === null) 
                     return new Node(val);
-                if (currentNode.data === val)
+                if (node.data === val)
                     throw new Error("this value exists already.");
                 
-                if (val < currentNode.data) 
-                    currentNode.leftChild = traverse(currentNode.leftChild, val);
-                if (val > currentNode.data) 
-                    currentNode.rightChild = traverse(currentNode.rightChild, val);
+                if (val < node.data) 
+                    node.left = traverse(node.left, val);
+                if (val > node.data) 
+                    node.right = traverse(node.right, val);
                 
-                return currentNode;
+                return node;
             }
         }
     }
     delete(value) {
         traverse(this.root, value);
-        function traverse(currentNode, val) {
-            if (currentNode === null)
+        function traverse(node = new Node(), val) {
+            if (node === null)
                 throw new Error("this value does not exists.");
-            if (currentNode.data === val) {
-                if (currentNode.leftChild === null && currentNode.rightChild === null)
+            if (node.data === val) {
+                if (node.left === null && node.right === null)
                     return null;
-                else if (currentNode.leftChild !== null && currentNode.rightChild !== null) {
-                    const successor = findMin(currentNode);
-                    if (successor.rightChild.data === currentNode.data) 
-                        successor.rightChild = currentNode.rightChild;
+                else if (node.left !== null && node.right !== null) {
+                    const successor = findMin(node);
+                    if (successor.right.data === node.data) 
+                        successor.right = node.right;
                     return successor;
                     
-                    function findMin(node) {
-                        if (node.leftChild.leftChild !== null) {
-                            const suc = findMin(node.leftChild);
-                            suc.rightChild.rightChild = node.rightChild;
-                            node.leftChild = null;
-                            return suc;
+                    function findMin(node = new Node()) {
+                        if (node.left.left !== null) {
+                            const min = findMin(node.left);
+                            min.right.right = node.right;
+                            node.left = null;
+                            return min;
                         } else {
-                            const min = node.leftChild;
-                            node.leftChild = null;
-                            min.rightChild = node;
+                            const min = node.left;
+                            node.left = null;
+                            min.right = node;
                             return min;
                         }
                     }
                 }
-                else if (currentNode.leftChild !== null || currentNode.rightChild !== null) 
-                    return currentNode.leftChild || currentNode.rightChild;
+                else if (node.left !== null || node.right !== null) 
+                    return node.left || node.right;
             }
             
-            if (val < currentNode.data) currentNode.leftChild = traverse(currentNode.leftChild, val);
-            if (val > currentNode.data) currentNode.rightChild = traverse(currentNode.rightChild, val);
+            if (val < node.data) node.left = traverse(node.left, val);
+            if (val > node.data) node.right = traverse(node.right, val);
             
-            return currentNode;
+            return node;
         }
-        
     }
     find(value) {
         let searchedNode;
@@ -83,8 +150,8 @@ export default class {
         while (queue.length !== 0) {
             const node = queue.shift();
             callback(node);
-            if (node.leftChild !== null) queue.push(node.leftChild);
-            if (node.rightChild !== null) queue.push(node.rightChild);
+            if (node.left !== null) queue.push(node.left);
+            if (node.right !== null) queue.push(node.right);
         }
     }
     inOrder(callback) {
@@ -92,12 +159,12 @@ export default class {
             throw new Error("please provide a callback function");
         
         traverse(this.root);
-        function traverse(currentNode) {
-            if (currentNode === null) return currentNode;
-            traverse(currentNode.leftChild); 
-            callback(currentNode);
-            traverse(currentNode.rightChild); 
-            return currentNode;
+        function traverse(node = new Node()) {
+            if (node === null) return node;
+            traverse(node.left); 
+            callback(node);
+            traverse(node.right); 
+            return node;
         }
     }
     preOrder(callback) {
@@ -105,12 +172,12 @@ export default class {
             throw new Error("please provide a callback function");
         
         traverse(this.root);
-        function traverse(currentNode) {
-            if (currentNode === null) return currentNode;
-            callback(currentNode);
-            traverse(currentNode.leftChild); 
-            traverse(currentNode.rightChild); 
-            return currentNode;
+        function traverse(node = new Node()) {
+            if (node === null) return node;
+            callback(node);
+            traverse(node.left); 
+            traverse(node.right); 
+            return node;
         }
     }
     postOrder(callback) {
@@ -118,49 +185,42 @@ export default class {
             throw new Error("please provide a callback function");
         
         traverse(this.root);
-        function traverse(currentNode) {
-            if (currentNode === null) return currentNode;
-            traverse(currentNode.leftChild); 
-            traverse(currentNode.rightChild); 
-            callback(currentNode);
-            return currentNode;
+        function traverse(node = new Node()) {
+            if (node === null) return node;
+            traverse(node.left); 
+            traverse(node.right); 
+            callback(node);
+            return node;
         }
     }
-    height(node) {
+    height(node = new Node()) {
         const heights = {
-            left: 0,
-            right: 0
+            left: traverse(node.left),
+            right: traverse(node.right)
         }
-        let height = 0;
-
-        traverse(node.leftChild);
-        heights.left = height
-        height = 0;
-        traverse(node.rightChild);
-        heights.right = height
-
         return (heights.left > heights.right) ? heights.left : heights.right;
         
-        function traverse(node) {
+        function traverse(node = new Node()) {
+            let height = 0;
             let queue = [node];
             while (queue.length !== 0) {
                 const node = queue.shift();
                 if (node === null) break;
-
-                if (node.leftChild !== null) queue.push(node.leftChild);
-                else if (node.rightChild !== null) queue.push(node.rightChild);
+                if (node.left !== null) queue.push(node.left);
+                else if (node.right !== null) queue.push(node.right);
 
                 height++;
             }
+            return height;
         }
     }
-    depth(node) {
+    depth(node = new Node()) {
         let height = 0;
         let currentNode = this.root;
         
         while (currentNode.data !== node.data) {
-            if (currentNode.data > node.data) currentNode = currentNode.leftChild;
-            else if (currentNode.data < node.data) currentNode = currentNode.rightChild;
+            if (currentNode.data > node.data) currentNode = currentNode.left;
+            else if (currentNode.data < node.data) currentNode = currentNode.right;
             else throw new Error("this value does not exists.");
             height++;
         }
@@ -172,13 +232,13 @@ export default class {
             const node = queue.shift();
             let left, right;
 
-            if (node.leftChild !== null) {
-                queue.push(node.leftChild);
-                left = this.height(node.leftChild);
+            if (node.left !== null) {
+                queue.push(node.left);
+                left = this.height(node.left);
             } else left = 0;
-            if (node.rightChild !== null) {
-                queue.push(node.rightChild);
-                right = this.height(node.rightChild);
+            if (node.right !== null) {
+                queue.push(node.right);
+                right = this.height(node.right);
             } else right = 0;
 
             const diff = (left > right) ? left - right: right - left;
@@ -191,83 +251,10 @@ export default class {
         let newData = [];
         while (queue.length !== 0) {
             const node = queue.shift();
-            if (node.leftChild !== null) queue.push(node.leftChild);
-            if (node.rightChild !== null) queue.push(node.rightChild);
+            if (node.left !== null) queue.push(node.left);
+            if (node.right !== null) queue.push(node.right);
             newData.push(node.data);
         }
         this.root = this.buildTree(newData);
-    }
-    #clean(data = []) {
-        const cleanData = [];
-        
-        for (let i1 = 0; i1 < data.length; i1++) {
-            if (cleanData.length === 0) cleanData.push(data[0]);
-            else {
-                let duplicate = false;
-                for (let i2 = 0; i2 < cleanData.length; i2++) {
-                    if (data[i1] === cleanData[i2]) {
-                        duplicate = true;
-                        break;
-                    }
-                } 
-                if (duplicate === false) cleanData.push(data[i1]);
-            }
-        }
-        
-        return cleanData;
-    }
-    #sort(data = []) {
-        if (data.length === 1) return data;
-        
-        const middle = Math.floor(data.length / 2);
-        let left = [], right = [];
-        
-        for (let i = 0; i < middle; i++) {
-            left.push(data[i]);
-        }
-        for (let i = middle; i < data.length; i++) {
-            right.push(data[i]);
-        }
-        
-        left = this.#sort(left);
-        right = this.#sort(right);
-        
-        const sortedData = [];
-        for (let i = 0; i < data.length; i++) {
-            if (left[0] === undefined) {
-                right.forEach((value) => {
-                    sortedData.push(value)
-                })
-                break;
-            } else if (right[0] === undefined) {
-                left.forEach((value) => {
-                    sortedData.push(value)
-                })
-                break;
-            } else {
-                if (left[0] < right[0]) sortedData.push(left.shift());
-                else sortedData.push(right.shift());
-            }
-        }
-        return sortedData;
-    }
-    #build(data = []) {
-        if (data[0] === undefined) return null;
-        if (Math.floor(data.length / 2) < 1) return new Node(data[0]);
-    
-        const middle = Math.floor(data.length / 2);
-        let left = [], right = [];
-    
-        for (let i = 0; i < middle; i++) {
-            left.push(data[i]);
-        }
-        for (let i = middle + 1; i < data.length; i++) {
-            right.push(data[i]);
-        }
-    
-        const treeNode = new Node(data[middle]);
-        treeNode.leftChild = this.#build(left);
-        treeNode.rightChild = this.#build(right);
-        return treeNode;
     }
 }

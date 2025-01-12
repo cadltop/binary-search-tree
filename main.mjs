@@ -32,45 +32,21 @@ tree.postOrder(printNode);
 console.log("in");
 tree.inOrder(printNode);
 
-// const tree =  new Tree();
-
-// insert
-// tree.insert(1000);
-// tree.insert(9);
-// delete
-// tree.insert(999);
-// tree.insert(1001);
-// tree.delete(4);
-// find
-// console.log(tree.find(23));
-// level order
-// tree.levelOrder(printNode);
-// in order
-// tree.inOrder(printNode);
-// pre order
-// tree.preOrder(printNode);
-// post order
-// tree.postOrder(printNode);
 // callback
 function printNode(node) {
   console.log(node.data);
 }
-// height
-// console.log(tree.height(tree.find(10)));
-// depth
-// console.log(tree.depth(tree.find(10)));
-
 // print
-function prettyPrint(node, prefix = "", isLeft = true) {
+function prettyPrint(node = new Node(), prefix = "", isLeft = true) {
   if (node === null) {
     return;
   }
-  if (node.rightChild !== null) {
-    prettyPrint(node.rightChild, `${prefix}${isLeft ? "│   " : "    "}`, false);
+  if (node.right !== null) {
+    prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
   }
   console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.data}`);
-  if (node.leftChild !== null) {
-    prettyPrint(node.leftChild, `${prefix}${isLeft ? "    " : "│   "}`, true);
+  if (node.left !== null) {
+    prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
   }
 };
 // grow
@@ -87,15 +63,3 @@ function growTree(size, range = 100) {
     return Math.round(Math.random() * range) + 1;
   } 
 }
-
-// // post process
-// growTree(50, 60);
-// prettyPrint(tree.root);
-
-// // balanced
-// // console.log(tree.isBalanced());
-
-// // rebalance
-// tree.rebalance();
-// prettyPrint(tree.root);
-// console.log(tree.isBalanced());
